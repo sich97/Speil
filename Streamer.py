@@ -1,7 +1,8 @@
 import argparse
 
-import cv2
 import zmq
+import mss
+import numpy as np
 
 from utils import image_to_string
 
@@ -24,7 +25,7 @@ class Streamer:
         context = zmq.Context()
         self.footage_socket = context.socket(zmq.PUB)
         self.footage_socket.connect('tcp://' + server_address + ':' + port)
-        self.keep_running = True
+        self.keep_running = False
 
     def start(self):
         """
@@ -32,22 +33,14 @@ class Streamer:
         Creates a camera, takes a image frame converts the frame to string and sends the string across the network
         :return: None
         """
-        print("Streaming Started...")
-        camera = Camera()
-        camera.start_capture()
-        self.keep_running = True
-
-        while self.footage_socket and self.keep_running:
-            try:
-                frame = camera.current_frame.read()  # grab the current frame
+        with mss.mss() as sct:
+            self.keep_running = True
+            print("Streaming Started...")
+            while self.footage_socket and self.keep_running:
+                # noinspection PyTypeChecker
+                frame = np.array(sct.grab(sct.monitors[1]))  # grab the current frame
                 image_as_string = image_to_string(frame)
                 self.footage_socket.send(image_as_string)
-
-            except KeyboardInterrupt:
-                cv2.destroyAllWindows()
-                break
-        print("Streaming Stopped!")
-        cv2.destroyAllWindows()
 
     def stop(self):
         """

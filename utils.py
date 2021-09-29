@@ -17,5 +17,6 @@ def string_to_image(string):
     import cv2
     import base64
     img = base64.b64decode(string)
+    # noinspection PyTypeChecker
     npimg = np.fromstring(img, dtype=np.uint8)
     return cv2.imdecode(npimg, 1)
