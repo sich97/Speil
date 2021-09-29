@@ -3,9 +3,11 @@ import argparse
 import cv2
 import zmq
 
-from camera.Camera import Camera
-from constants import PORT, SERVER_ADDRESS
 from utils import image_to_string
+
+
+SERVER_ADDRESS = "localhost"
+PORT = "8090"
 
 
 class Streamer:

@@ -1,5 +1,0 @@
-imutils
-numpy
-#opencv-python
-pyzmq
-pytest

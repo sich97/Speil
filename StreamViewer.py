@@ -4,8 +4,9 @@ import cv2
 import numpy as np
 import zmq
 
-from constants import PORT
 from utils import string_to_image
+
+PORT = "8090"
 
 
 class StreamViewer:
@@ -50,6 +51,7 @@ class StreamViewer:
         :return: None
         """
         self.keep_running = False
+
 
 def main():
     port = PORT
