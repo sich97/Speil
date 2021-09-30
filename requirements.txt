@@ -2,3 +2,4 @@ pyzmq
 mss
 numpy
 opencv-python
+PyQt5
