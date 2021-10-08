@@ -1,9 +1,7 @@
 import sys
 import configparser
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow, QMenuBar, QGridLayout, QWidget, QGroupBox, QVBoxLayout,\
-    QHBoxLayout, QLineEdit, QPushButton
+from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow, QMenuBar, QGridLayout, QWidget, QLineEdit, QPushButton
 import zmq
 
 PREFERENCES_PATH = "client/preferences.ini"
