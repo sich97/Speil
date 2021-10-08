@@ -2,7 +2,7 @@ import configparser
 import zmq
 import json
 
-PREFERENCES_PATH = "preferences.ini"
+PREFERENCES_PATH = "server/preferences.ini"
 
 connections = {"0": "Placeholder"}
 

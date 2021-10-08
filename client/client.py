@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow, QMenuBar, QGridLayout, QWidget, QGroupBox, QVBoxLayout,\
     QHBoxLayout, QLineEdit, QPushButton
 
-PREFERENCES_PATH = "preferences.ini"
+PREFERENCES_PATH = "client/preferences.ini"
 
 
 def get_preferences():
