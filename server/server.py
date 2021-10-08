@@ -10,7 +10,7 @@ connections = {"0": "Placeholder"}
 def main():
     # Load preferences
     preferences = get_preferences()
-    server_bind_address = "tcp://" + preferences["default"]["bind_address"] + preferences["default"]["bind_port"]
+    server_bind_address = "tcp://" + preferences["default"]["bind_address"] + ":" + preferences["default"]["bind_port"]
 
     # Initialize listener
     context = zmq.Context()

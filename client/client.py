@@ -4,6 +4,7 @@ import configparser
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow, QMenuBar, QGridLayout, QWidget, QGroupBox, QVBoxLayout,\
     QHBoxLayout, QLineEdit, QPushButton
+import zmq
 
 PREFERENCES_PATH = "client/preferences.ini"
 
@@ -56,6 +57,7 @@ class Preferences(QMainWindow):
 
     settings_indexes = {}
     feedback_label = None
+    preferences = None
 
     def __init__(self, parent=None):
         """Initializer."""
@@ -74,20 +76,20 @@ class Preferences(QMainWindow):
         self.feedback_label = QLabel()
         grid.addWidget(self.feedback_label, 0, 2)
 
-        preferences = get_preferences()
+        self.preferences = get_preferences()
 
         highest_x_coordinate = 0
         highest_y_coordinate = 0
-        for section_index in range(len(preferences.keys())):
+        for section_index in range(len(self.preferences.keys())):
             highest_x_coordinate += 2
 
-            section_name = list(preferences.keys())[section_index]
+            section_name = list(self.preferences.keys())[section_index]
             grid.addWidget(QLabel(section_name.upper() + ":"), 1, section_index * 2)
 
-            for setting_index in range(len(preferences[section_name].keys())):
+            for setting_index in range(len(self.preferences[section_name].keys())):
                 highest_y_coordinate += 1
 
-                setting_name = list(preferences[section_name].keys())[setting_index]
+                setting_name = list(self.preferences[section_name].keys())[setting_index]
                 grid.addWidget(QLabel(setting_name), setting_index + 2, section_index * 2)
 
                 value_line = QLineEdit()
@@ -97,12 +99,12 @@ class Preferences(QMainWindow):
         self.load_values()
 
     def load_values(self):
-        preferences = get_preferences()
+        self.preferences = get_preferences()
 
-        for section in preferences:
-            for setting in preferences[section]:
+        for section in self.preferences:
+            for setting in self.preferences[section]:
                 grid_id = self.settings_indexes[setting]
-                self.centralWidget().layout().itemAt(grid_id).widget().setText(preferences[section][setting])
+                self.centralWidget().layout().itemAt(grid_id).widget().setText(self.preferences[section][setting])
 
         self.feedback_label.setText("Loaded settings successfully...")
 
@@ -115,13 +117,20 @@ class Preferences(QMainWindow):
                 set_preferences(section, setting, new_value)
 
         self.feedback_label.setText("Settings saved successfully...   ")
+        self.load_values()
 
 
 class MainWindow(QMainWindow):
     """Main Window."""
+
+    zmq_context = None
+    socket = None
+    preferences = None
+
     def __init__(self, parent=None):
         """Initializer."""
         super().__init__(parent)
+        self.initialize_networking()
         self.preferences = Preferences(self)
         self.setWindowTitle("Speil")
         self.resize(640, 480)
@@ -132,6 +141,15 @@ class MainWindow(QMainWindow):
         self.setMenuBar(menu_bar)
         preferences = menu_bar.addAction("Preferences")
         preferences.triggered.connect(lambda: self.preferences.show())
+
+    def _initialize_networking(self):
+        self.zmq_context = zmq.Context()
+        self.socket = self.context.socket(zmq.REQ)
+        server_address = "tcp://" +\
+                         self.preferences.preferences["authentication"]["server_address"] +\
+                         ":" +\
+                         self.preferences.preferences["authentication"]["server_port"]
+        self.socket.connect(server_address)
 
 
 if __name__ == "__main__":
