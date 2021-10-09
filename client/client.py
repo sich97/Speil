@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QDesktopWidget
 import zmq
 
 # Private packages
-from networking import authentication
+from networking import authentication, server_communication
 from GUI.preferences import preferences_window
 from GUI import menu_bar, login_page, dashboard
 
@@ -52,6 +52,9 @@ class MainWindow(QMainWindow):
             dashboard.create_dashboard(self)
         else:
             print(reply_data)
+
+    def get_available_clients(self):
+        return server_communication.get_available_clients(self.socket, self.connection_id)
 
 
 if __name__ == "__main__":

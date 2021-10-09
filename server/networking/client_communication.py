@@ -50,6 +50,7 @@ def close_connection(target_connection):
 def get_available_clients(connections):
     available_clients = {}
     for connection in connections:
-        info = [connections[connection].name, connections[connection].is_streaming]
-        available_clients[connection] = info
+        if connection != "0":
+            info = [connections[connection].name, connections[connection].is_streaming]
+            available_clients[connection] = info
     return 1, available_clients
