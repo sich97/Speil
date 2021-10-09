@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton
 
 def create_login_page(parent):
     login_widget = QWidget()
+    parent.window_login_page = login_widget
     v_split = QVBoxLayout()
     login_widget.setLayout(v_split)
     parent.setCentralWidget(login_widget)
@@ -14,8 +15,8 @@ def create_login_page(parent):
     text_label2.setContentsMargins(0, 0, 0, 10)
     v_split.addWidget(text_label2)
 
-    default_server_address = parent.preferences.preferences["authentication"]["server_address"]\
-        + ":" + parent.preferences.preferences["authentication"]["server_port"]
+    default_server_address = parent.window_preferences.preferences["authentication"]["server_address"]\
+        + ":" + parent.window_preferences.preferences["authentication"]["server_port"]
     server_address_box = QLineEdit(default_server_address)
     server_address_box.setPlaceholderText("0.0.0.0:1234")
     v_split.addWidget(server_address_box)

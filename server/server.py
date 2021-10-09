@@ -28,51 +28,62 @@ def main():
         payload_type = message["type"]
         payload_data = message["data"]
 
-        reply = ""
+        reply_status = 0
+        reply_data = ""
 
         if payload_type == "register":
             # Expected data format: {name: CLIENT-NAME, password: CLIENT-PASSWORD, server_password: SERVER-PASSWORD}
             if payload_data.pop("server_password") == preferences["default"]["password"]:
-                new_connection_id = str(int(list(connections.keys())[-1]) + 1)
-                connections[new_connection_id] = client_communication.Connection(new_connection_id, payload_data)
-                reply = new_connection_id
+                new_connection_id = int(list(connections.keys())[-1]) + 1
+                connections[str(new_connection_id)] = client_communication.Connection(new_connection_id, payload_data)
+                reply_status, reply_data = 1, new_connection_id
             else:
-                reply = "Error: authentication unsuccessful!"
+                reply_status, reply_data = 0, "Authentication unsuccessful"
 
         else:
-            if payload_connection_id not in connections:
-                reply = "Error: connection_id not recognized!"
+            if str(payload_connection_id) not in connections:
+                reply_status, reply_data = 0, "Connection ID not recognized"
 
             else:
-                origin_connection = connections[payload_connection_id]
+                origin_connection = connections[str(payload_connection_id)]
 
                 if payload_type == "close_connection":
                     # Expected data format: NONE
-                    reply = client_communication.close_connection(payload_connection_id)
+                    reply_status,\
+                     reply_data = client_communication.close_connection(connections[str(payload_connection_id)])
 
                 elif payload_type == "get_available_streams":
                     # Expected data format: NONE
-                    reply = client_communication.get_available_clients(connections)
+                    reply_status, reply_data = client_communication.get_available_clients(connections)
 
                 elif payload_type == "start_stream":
                     # Expected data format: TARGET-CONNECTION-ID
-                    target_connection = connections[payload_data]
-                    reply = target_connection.start_stream()
+                    target_connection = connections[str(payload_data)]
+                    reply_status, reply_data = target_connection.start_stream()
+
+                elif payload_type == "stop_stream":
+                    # Expected data format: TARGET-CONNECTION-ID
+                    target_connection = connections[str(payload_data)]
+                    reply_status, reply_data = target_connection.stop_stream()
 
                 elif payload_type == "stream_started":
                     # Expected data format: NONE
-                    reply = origin_connection.stream_started()
+                    reply_status, reply_data = origin_connection.stream_started()
+
+                elif payload_type == "stream_stopped":
+                    # Expected data format: NONE
+                    reply_status, reply_data = origin_connection.stream_stopped()
 
                 elif payload_type == "update_frame_info":
                     # Expected data format: frame_info_pickle
-                    reply = origin_connection.update_frame_info(payload_data)
+                    reply_status, reply_data = origin_connection.update_frame_info(payload_data)
 
                 elif payload_type == "get_frame_info":
                     # Expected data format: TARGET-CONNECTION-ID
-                    target_connection = connections[payload_data]
-                    reply = target_connection.get_frame()
+                    target_connection = connections[str(payload_data)]
+                    reply_status, reply_data = target_connection.get_frame()
 
-        transmission.send_zipped_pickle(socket, reply)
+        transmission.send_zipped_pickle(socket, (reply_status, reply_data))
 
 
 if __name__ == "__main__":

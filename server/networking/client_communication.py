@@ -1,6 +1,3 @@
-import json
-
-
 class Connection:
     connection_id = None
     name = None
@@ -18,22 +15,32 @@ class Connection:
 
     def start_stream(self):
         self.pending_commands.append("start_stream")
-        return "start_stream function finished"
+        return 1, "starting stream"
+
+    def stop_stream(self):
+        self.pending_commands.append("stop_stream")
+        return 1, "stopping stream"
 
     def stream_started(self):
         self.pending_commands.remove("start_stream")
-        return "stream_started function finished"
+        self.is_streaming = True
+        return 1, "stream started"
+
+    def stream_stopped(self):
+        self.pending_commands.remove("stop_stream")
+        self.is_streaming = False
+        return 1, "stream stopped"
 
     def update_frame_info_pickle(self, frame_info_pickle):
         self.frame_info_pickle = frame_info_pickle
-        return "update_frame_info function finished"
+        return 1, "frame info updated"
 
     def get_frame_info_pickle(self):
-        return self.frame_info_pickle
+        return 1, self.frame_info_pickle
 
 
-def close_connection(connection_id):
-    return "close_connection function not developed yet!"
+def close_connection(target_connection):
+    return 0, "close_connection function not developed yet!"
 
 
 def get_available_clients(connections):
@@ -41,4 +48,4 @@ def get_available_clients(connections):
     for connection in connections:
         info = [connections[connection].name, connections[connection].is_streaming]
         available_clients[connection] = info
-    return json.dumps(available_clients)
+    return 1, available_clients
