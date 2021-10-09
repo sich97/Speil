@@ -52,7 +52,7 @@ def main():
                     reply_status,\
                      reply_data = client_communication.close_connection(connections[str(payload_connection_id)])
 
-                elif payload_type == "get_available_streams":
+                elif payload_type == "get_available_clients":
                     # Expected data format: NONE
                     reply_status, reply_data = client_communication.get_available_clients(connections)
 
