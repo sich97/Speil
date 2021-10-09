@@ -48,8 +48,8 @@ class MainWindow(QMainWindow):
     def login(self, server_address, server_password):
         reply_status, reply_data = authentication.connect_to_server(self, server_address, server_password)
         if reply_status:
-            self.window_login_page.hide()
-            dashboard.create_dashboard(self)
+            self.window_dashboard = dashboard.Dashboard(self)
+            self.setCentralWidget(self.window_dashboard)
         else:
             print(reply_data)
 
