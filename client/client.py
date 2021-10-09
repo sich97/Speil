@@ -7,6 +7,7 @@ import zmq
 from networking import authentication, server_communication
 from GUI.preferences import preferences_window
 from GUI import menu_bar, login_page, dashboard
+from GUI.dashboard import dashboard
 
 PREFERENCES_PATH = "client/preferences.ini"
 
