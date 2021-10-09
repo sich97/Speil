@@ -22,12 +22,10 @@ class Connection:
         return 1, "stopping stream"
 
     def stream_started(self):
-        self.pending_commands.remove("start_stream")
         self.is_streaming = True
         return 1, "stream started"
 
     def stream_stopped(self):
-        self.pending_commands.remove("stop_stream")
         self.is_streaming = False
         return 1, "stream stopped"
 
@@ -37,6 +35,12 @@ class Connection:
 
     def get_frame_info_pickle(self):
         return 1, self.frame_info_pickle
+
+    def get_pending_command(self):
+        if len(self.pending_commands) > 0:
+            return 1, self.pending_commands.pop(0)
+        else:
+            return 0, "no pending commands"
 
 
 def close_connection(target_connection):

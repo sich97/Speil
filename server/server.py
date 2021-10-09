@@ -83,6 +83,10 @@ def main():
                     target_connection = connections[str(payload_data)]
                     reply_status, reply_data = target_connection.get_frame()
 
+                elif payload_type == "get_pending_command":
+                    # Expected data format: NONE
+                    reply_status, reply_data = origin_connection.get_pending_command()
+
         transmission.send_zipped_pickle(socket, (reply_status, reply_data))
 
 
