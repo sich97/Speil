@@ -50,7 +50,7 @@ def main():
                 if payload_type == "close_connection":
                     # Expected data format: NONE
                     reply_status,\
-                     reply_data = client_communication.close_connection(connections[str(payload_connection_id)])
+                     reply_data = client_communication.close_connection()
 
                 elif payload_type == "get_available_clients":
                     # Expected data format: NONE

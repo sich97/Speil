@@ -6,6 +6,7 @@
 
 ###General:
 - What if a client looses internet connection, gets a timeout from server, and reconnect - still with an old (and possibly in-use) connection ID?
+- A stream should always be available, but not stream if no client is explicitly asking for new frames.
 
 - ###Client:
 - [x] <span style="color: green">Develop main GUI root window
@@ -13,7 +14,15 @@
 - [x] <span style="color: orange">Develop dashboard window
   - [x] <span style="color: green">Create rudimentary layout
   - [x] <span style="color: green">Load available clients from server and display them in item list
-  - [ ] <span style="color: blue">Develop interaction with these items as to initiate remote control (requires client-to-client authentication)
+  - [ ] <span style="color: orange">Develop interaction with these items as to initiate remote control (requires client-to-client authentication)
+    - [x] <span style="color: green">Open up a streamer window on doubleclick of a client_item
+    - [ ] <span style="color: blue">Client-to-client authentication
+    - [ ] <span style="color: red">Continually ask server for current frame_information
+    - [ ] <span style="color: red">Draw fake mouse cursor on frame, and then display it in the streamer window
+    - [ ] <span style="color: red">On each new frame from server, send any changes to the local cursor position to server
+- [ ] <span style="color: orange">Continual lifecycle of asking server for pending commands
+  - [x] <span style="color: green">Create system for assigning and query of pending commands on client/server
+  - [ ] <span style="color: red">Create a continual lifecycle for this once authenticated with server
 
 
 - ###Server:

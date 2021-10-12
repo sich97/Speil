@@ -11,19 +11,24 @@ def get_pending_command(socket, connection_id):
         return reply_data
 
 
-def execute_command(socket, connection_id, command):
+def execute_command(command):
     if command == "start_stream":
-        start_stream(socket, connection_id)
+        start_stream()
 
     elif command == "stop_stream":
-        stop_stream(socket, connection_id)
+        stop_stream()
 
 
-def start_stream(socket, connection_id):
+def start_stream():
     pass
 
 
-def stop_stream(socket, connection_id):
+def start_remote_stream(socket, connection_id, target_connection_id):
+    send_zipped_pickle(socket, {"connection_id": connection_id, "type": "start_stream", "data": target_connection_id})
+    return recv_zipped_pickle(socket)
+
+
+def stop_stream():
     pass
 
 

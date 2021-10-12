@@ -10,6 +10,7 @@ class AvailableClientView(QListWidget):
         QListWidget.__init__(self)
         self.dashboard_window = parent
         self.load_client_information()
+        self.doubleClicked.connect(self.dashboard_window.client_item_double_clicked)
 
     def load_client_information(self):
         # Clear the layout

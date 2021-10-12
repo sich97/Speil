@@ -57,6 +57,9 @@ class MainWindow(QMainWindow):
     def get_available_clients(self):
         return server_communication.get_available_clients(self.socket, self.connection_id)
 
+    def start_remote_stream(self, target_connection_id):
+        return server_communication.start_remote_stream(self.socket, self.connection_id, target_connection_id)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

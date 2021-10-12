@@ -43,7 +43,7 @@ class Connection:
             return 0, "no pending commands"
 
 
-def close_connection(target_connection):
+def close_connection():
     return 0, "close_connection function not developed yet!"
 
 
